@@ -1,0 +1,303 @@
+@import url('https://fonts.googleapis.com/css?family=Quicksand:400,500,700');
+@import url('https://fonts.googleapis.com/css2?family=Faster+One&display=swap');
+html,
+body {
+    box-sizing: border-box;
+    font-family: "Quicksand", sans-serif;
+    background-color: rgb(242, 242, 242);
+}
+
+.btn.remove-outline:focus{
+    outline: 0;
+    box-shadow: 0 0 0 0
+}
+
+
+
+.loader {
+    margin: 0 auto;
+    width: 60px;
+    height: 50px;
+    text-align: center;
+    font-size: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translateY(-50%) translateX(-50%);
+}
+  .loader > div {
+    height: 100%;
+    width: 8px;
+    display: inline-block;
+    float: left;
+    margin-left: 2px;
+    -webkit-animation: delay 0.8s infinite ease-in-out;
+    animation: delay 0.8s infinite ease-in-out;
+}
+  .loader .bar1 {
+    background-color: #754fa0;
+}
+  .loader .bar2 {
+    background-color: #09b7bf;
+    -webkit-animation-delay: -0.7s;
+    animation-delay: -0.7s;
+}
+  .loader .bar3 {
+    background-color: #90d36b;
+    -webkit-animation-delay: -0.6s;
+    animation-delay: -0.6s;
+}
+  .loader .bar4 {
+    background-color: #f2d40d;
+    -webkit-animation-delay: -0.5s;
+    animation-delay: -0.5s;
+}
+  .loader .bar5 {
+    background-color: #fcb12b;
+    -webkit-animation-delay: -0.4s;
+    animation-delay: -0.4s;
+}
+  .loader .bar6 {
+    background-color: #ed1b72;
+    -webkit-animation-delay: -0.3s;
+    animation-delay: -0.3s;
+}
+  
+@-webkit-keyframes delay {
+    0%, 40%, 100% {
+      -webkit-transform: scaleY(0.05);
+    }
+    20% {
+      -webkit-transform: scaleY(1);
+    }
+}
+@keyframes delay {
+    0%, 40%, 100% {
+      transform: scaleY(0.05);
+      -webkit-transform: scaleY(0.05);
+    }
+    20% {
+      transform: scaleY(1);
+      -webkit-transform: scaleY(1);
+    }
+}
+
+.wrapper{
+    background-image: url('../image/Confetti-Doodles.svg')
+}
+.search-icon.h3 {
+    font-size: 1rem;
+}
+
+.close-search.fa-3x {
+    font-size: 1.5em;
+}
+
+.form-control.search:focus, .form-control.search {
+    color: #f8f9fa;
+}
+
+.loading-spinner{
+    top: .75rem;
+    right: 0;
+}
+
+.search-help-text {
+    font-size: 11px;
+    color: white !important;
+}
+.form-control.search{
+    line-height: 2rem;
+    font-size: 1rem;
+    border-color: white !important;
+    border-width: 2px !important;
+}
+.search-button{
+    border-color: white !important;
+    border-width: 2px !important;
+}
+#InputSearch {
+    transition: all 1.5s ease;
+}
+#InputSearch::placeholder{
+    color: white;
+    font-size: 1rem;
+}
+#InputSearch:focus, #InputSearch:focus ~ div > .search-button{
+    border-bottom: 2px solid yellow !important;
+    box-shadow: 0 2px 2px -2px yellow !important;
+}
+.btn.grow {
+    cursor: pointer;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+}
+.btn.grow:hover, .btn.grow:focus, .btn.grow:active {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+.nominate-button {
+    border-radius: 0 0 0.25rem 0.25rem !important;
+    color: white;
+    background: #379aff !important;
+    padding: 14px 0 14px !important;
+    cursor: pointer;
+    overflow: hidden;
+}
+.nominate-button span {
+    display: block;
+    position: relative;
+    z-index: 10;
+}
+.nominate-button:after,
+.nominate-button:before {
+    padding: 14px 0 38px;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: calc(-100% - 38px);
+    height: calc(100% - 29px);
+    width: calc(100% + 20px);
+    color: #fff;
+    border-radius: 2px;
+    transform: skew(-25deg);
+}
+.nominate-button:after {
+    background: #fff;
+    transition: left 0.8s cubic-bezier(0.86, 0, 0.07, 1) 0.2s;
+    z-index: 0;
+    opacity: 0.8;
+}
+
+.nominate-button:before {
+    background: #13c276;
+    z-index: 5;
+    transition: left 1s cubic-bezier(0.86, 0, 0.07, 1);
+}
+
+.nominate-button:hover:after {
+    left: calc(0% - 10px);
+    transition: left 0.8s cubic-bezier(0.86, 0, 0.07, 1);
+}
+
+.nominate-button:hover:before {
+    left: calc(0% - 10px);
+    transition: left 1s cubic-bezier(0.86, 0, 0.07, 1);
+}
+
+.badge:after {
+    content: attr(data-count);
+    position: absolute;
+    background: rgba(255, 0, 0, 1);
+    height: 20px;
+    width: 20px;
+    top: -10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 15px;
+    font-size: 9px;
+    border-radius: 50%;
+    color: white;
+    text-align: center;
+}
+.lds-ellipsis {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+.lds-ellipsis div {
+    position: absolute;
+    top: 36px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #b91515;
+    animation-timing-function: cubic-bezier(0,1,1,0);
+
+}
+.lds-ellipsis div:nth-child(1) {
+    left: 8px;
+    animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+    left: 8px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+    left: 32px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(1) {
+    left: 56px;
+    animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+    0% {
+        transform: scale(0);
+    }
+    100%{
+        transform: scale(1);
+    }
+
+}
+@keyframes lds-ellipsis3 {
+    0% {
+        transform: scale(1);
+    }
+    100%{
+        transform: scale(0);
+    }
+
+}
+@keyframes lds-ellipsis2 {
+    0% {
+        transform: translate(0, 0);
+    }
+    100%{
+        transform: translate(24px, 0);
+    }
+
+}
+.nominations-list{
+    top: 0;
+    right: 0;
+    z-index: 100;
+}
+.nomination-list-items-move{
+    transition: transform 1s;
+}
+@media (min-width: 650px) {
+    .form-control.search {
+        line-height: 3rem;
+        font-size: 2rem;
+    }
+    .loading-spinner{
+        top: calc(.75rem + 1.5rem);
+        right: 0;
+    }
+    .search-icon.h3 {
+        font-size: 1.75rem;
+    }
+    .search-help-text {
+        font-size: 1rem;
+    }
+    #InputSearch::placeholder{
+        color: white;
+        font-size: 2rem;
+    }
+    .nominations-list {
+        width: 20vw !important;
+    }
+}
+@media (min-width: 768px) and (max-width: 992px) {
+    .nominations-list {
+        width: 27vw !important;
+    }
+}

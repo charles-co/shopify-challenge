@@ -7,17 +7,17 @@
             <title>Shoppies</title>
             <meta name="keywords" content="" />
             <meta name="description" content="Movie awards for entrepreneurs" />
+            <link rel="stylesheet" href="assets/css/base.css" />                         
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" integrity="sha512-oc9+XSs1H243/FRN9Rw62Fn8EtxjEYWHXRvjS43YtueEewbS6ObfXcJNyohjHqVKFPoXXUxwc+q1K7Dee6vv9g==" crossorigin="anonymous" />            
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
             <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
-            <link rel="stylesheet" href="assets/css/base.css" />                         
     </head>
     <body class="min-vh-100 wrapper d-flex flex-column" style="overflow-x:hidden;">
         <div id="mainwrapper" class="container">
             <div class="row justify-content-center no-gutters">
                 <div class="col-5 col-md-2">
-                    <div class="d-flex my-3 animate__animated animate__fadeInDown justify-content-center">
+                    <div class="d-flex my-3 animate__animated animate__fadeInDown justify-content-center" v-if="!shownav">
                         <svg width="100%" height="100%" viewBox="0 0 519 128" fill="#0000" xmlns="http://www.w3.org/2000/svg">
                         <g filter="url(#filter0_b)">
                         <mask id="path-1-outside-1" maskUnits="userSpaceOnUse" x="0.203125" y="0.375" width="519" height="127" fill="none">
@@ -67,10 +67,10 @@
                 <div class="col-12 col-md-10">
                     <div class="d-flex justify-content-end p-3 overflow-hidden" style="font-size: 1.4em;">
                         <button @click="shownomination=true" class="btn text-primary btn-transparent badge grow remove-outline position-relative" :data-count="nominations.length">
-                            <i class="fas fa-clipboard-list"></i>
+                            <i class="fas fa-clipboard-list animate__animated animate__fadeInLeft animate__faster animate__delay-5s"></i>
                         </button>
                         <button disabled class="btn text-primary btn-transparent badge remove-outline position-relative" data-count="0">
-                            <i class="fas fa-bell"></i>
+                            <i class="fas fa-bell animate__animated animate__fadeInRight animate__delay-3s"></i>
                         </button>
                     </div>
                 </div>
@@ -390,7 +390,7 @@
                         loading: false,
                         empty: false,
                         query: "",
-                        page: 0,
+                        page: 1,
                         movies: [],
                         nominations: [],
                         nominationlimit: false,
@@ -543,6 +543,9 @@
                         var scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop
                         if(scrollTop >= 260){
                             this.shownav = true
+                            setTimeout(function() {
+                                this.animate_logo()
+                            }.bind(this), 1000)
                         }else{
                             this.shownav = false
                         }

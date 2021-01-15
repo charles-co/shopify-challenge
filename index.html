@@ -7,14 +7,11 @@
             <title>Shoppies</title>
             <meta name="keywords" content="" />
             <meta name="description" content="Movie awards for entrepreneurs" />
-            <divnk rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" integrity="sha512-oc9+XSs1H243/FRN9Rw62Fn8EtxjEYWHXRvjS43YtueEewbS6ObfXcJNyohjHqVKFPoXXUxwc+q1K7Dee6vv9g==" crossorigin="anonymous" />            
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" integrity="sha512-oc9+XSs1H243/FRN9Rw62Fn8EtxjEYWHXRvjS43YtueEewbS6ObfXcJNyohjHqVKFPoXXUxwc+q1K7Dee6vv9g==" crossorigin="anonymous" />            
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-            <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+            <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
-            <link rel="stylesheet" href="assets/css/base.css" />            
-        <style>
-            
-        </style>
+            <link rel="stylesheet" href="assets/css/base.css" />                         
     </head>
     <body class="min-vh-100 wrapper d-flex flex-column" style="overflow-x:hidden;">
         <div id="mainwrapper" class="container">
@@ -130,7 +127,7 @@
                     <movie-card
                         v-for="(movie, index) in movies"
                         v-if="movies.length > 0"
-                        v-bind:key="index"
+                        v-bind:key="movie.imdbID"
                         v-bind:id="movie.imdbID"
                         v-bind:title="movie.Title"
                         v-bind:year="movie.Year"
@@ -206,10 +203,11 @@
         <div class="footer mt-auto bg-success py-2">
             <p class="text-center mb-0"><i class="fas fa-code"></i> with <i class="fas fa-heart text-danger"></i>, Charles.</p>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/vue-infinite-scroll@2.0.2/vue-infinite-scroll.min.js"></script>
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+        <script src="assets/js/vue-infinite-scroll.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q==" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue-infinite-scroll@2.0.2/vue-infinite-scroll.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js" integrity="sha512-90vH1Z83AJY9DmlWa8WkjkV79yfS2n2Oxhsi2dZbIv0nC4E6m5AbH8Nh156kkM7JePmqD6tcZsfad1ueoaovww==" crossorigin="anonymous"></script>
         <script type="text/javascript">
             Vue.component('movie-card', {

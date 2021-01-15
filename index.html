@@ -67,7 +67,7 @@
                 <div class="col-12 col-md-10">
                     <div class="d-flex justify-content-end p-3 overflow-hidden" style="font-size: 1.4em;">
                         <button @click="shownomination=true" class="btn text-primary btn-transparent badge grow remove-outline position-relative" :data-count="nominations.length">
-                            <i class="fas fa-clipboard-list animate__animated animate__fadeInLeft animate__faster animate__delay-3s"></i>
+                            <i class="fas fa-clipboard-list animate__animated animate__fadeInLeft animate__faster animate__delay-4s"></i>
                         </button>
                         <button disabled class="btn text-primary btn-transparent badge remove-outline position-relative" data-count="0">
                             <i class="fas fa-bell animate__animated animate__fadeInRight animate__delay-3s"></i>
@@ -153,12 +153,12 @@
                     </div>
                 </transition>
             </div>
-            <div v-if="shownomination" @click="shownomination=false" class="fixed-top vh-100 vw-100 overflow-auto" style="opacity:.8;background:#000000;z-index:50;"></div>
+            <div v-if="shownomination" @click="shownomination=false" class="fixed-top vh-100 vw-100" style="opacity:.8;background:#000000;z-index:50;"></div>
             <transition enter-active-class="animate__animated animate__slideInRight" leave-active-class="animate__animated animate__slideOutRight animate__fast"> 
-                <div v-if="shownomination" key="items" class="container fancy-font d-flex flex-column vh-100 position-fixed bg-info nominations-list">
+                <div v-if="shownomination" key="items" class="container d-flex flex-column vh-100 position-fixed bg-info nominations-list overflow-auto">
                     <div class="row no-gutters my-3">
                         <div class="d-flex w-100 align-items-center justify-content-between">
-                            <p class="mb-0 font-weight-bold" style="letter-spacing:3px;">NOMINATIONS</p>
+                            <p class="mb-0 font-weight-bold fancy-font" style="letter-spacing:3px;">NOMINATIONS</p>
                             <button @click="shownomination=false" class="btn grow remove-outline bg-danger text-white">
                                 <i class="fas fa-times"></i>
                             </button>
@@ -171,13 +171,13 @@
                                 <div class="flex-grow-1 border-0 bg-dark d-flex flex-column justify-content-start align-items-center">
                                         <img :src="movie.Poster" class="card-img-top img-fluid rounded-0">
                                 </div>
-                                <div class="card-body p-0 d-flex flex-column justify-content-between rounded-bottom flex-grow-0" style="background:crimson;">
+                                <div class="card-body fancy-font p-0 d-flex flex-column justify-content-between rounded-bottom flex-grow-0" style="background:crimson;">
                                         <p class="card-title text-white m-2" style="font-size:10px;z-index:100;">  
                                             <i class="fas fa-book text-warning"></i>:&nbsp;&nbsp;[[ movie.Title ]]
                                             <br><i class="fas fa-calendar-alt text-warning"></i>:&nbsp;&nbsp;[[ movie.Year ]]<br>
                                             <i class="fas fa-cogs text-warning"></i>:&nbsp;&nbsp;[[ movie.Type ]] 
                                         </p>
-                                        <button type="button" @click="revoke(movie.imdbID)" class="btn btn-block rounded-0 py-3 text-white remove-outline bg-warning"><span><i class="fas fa-thumbs-down"></i></span></button>
+                                        <button type="button" @click="revoke(movie.imdbID)" class="btn btn-block fancy-font rounded-0 py-3 text-white remove-outline bg-warning"><span><i class="fas fa-thumbs-down"></i></span></button>
                                 </div>
                             </div>
                         </li>    

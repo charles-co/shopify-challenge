@@ -16,23 +16,10 @@
             <link rel="stylesheet" href="assets/css/animate.min.css" />
             <link rel="stylesheet" href="assets/css/all.min.css" />
         <style>
-            .on-top{
-                z-index: 1;
-            }
-            body::-webkit-scrollbar {
-                display: none;
-            }
-            body{
-                -ms-overflow-style: none;
-                scrollbar-width: none;
-            }
-            .card{
-                -webkit-backface-visibility: hidden;
-                -webkit-font-smoothing: subpixel-antialiased;
-            }
+            
         </style>
     </head>
-    <body class="min-vh-100 wrapper" style="overflow-y:scroll; overflow-x:hidden;">
+    <body class="min-vh-100 wrapper d-flex flex-column" style="overflow-x:hidden;">
         <div id="mainwrapper" class="container">
             <div class="row justify-content-center no-gutters">
                 <div class="col-5 col-md-2">
@@ -72,7 +59,7 @@
                 </div>
                 <div class="w-100"></div>
                 <div class="col-12 mt-4 col-md-10">
-                    <form class="position-relative overflow-hidden">
+                    <form @submit.prevent class="position-relative overflow-hidden">
                         <input type="text" id="InputSearch" autocomplete="off" id="InputSearch" v-model.trim="query" @keyup.enter="search" placeholder="search for movie..." aria-label="Search" class="form-control bg-transparent search border-bottom border-top-0 border-right-0 border-left-0 rounded-0">
                         <p class="text-muted mt-2 search-help-text font-italic">please try to specific with search. e.g Avengers.</p>
                         <transition enter-active-class="animate__animated animate__fadeInRight animate__faster" leave-active-class="animate__animated animate__faster animate__fadeOutRight">
@@ -159,7 +146,7 @@
                     ></movie-card>
                 </transition-group>
                 <transition mode="out-in" enter-active-class="animate__animated animate__fadeInUp" leave-active-class="animate__animated animate__fadeOutDown">
-                    <div class="justify-content-center py-4" v-show="busy" :class="{'d-flex': busy}">
+                    <div class="justify-content-center py-4" v-if="busy" :class="{'d-flex': busy}">
                         <div class="m-1 loading bg-danger rounded" style="height:10px;width:10px;" role="status">
                             <span class="sr-only">Loading...</span>
                         </div>
@@ -174,7 +161,7 @@
             </div>
             <div v-if="shownomination" @click="shownomination=false" class="fixed-top vh-100 vw-100" style="opacity:.8;background:#000000;z-index:50;"></div>
             <transition enter-active-class="animate__animated animate__slideInRight" leave-active-class="animate__animated animate__slideOutRight animate__fast"> 
-                <div v-if="shownomination" key="items" class="container d-flex flex-column vh-100 position-fixed bg-info nominations-list">
+                <div v-if="shownomination" key="items" class="container fancy-font d-flex flex-column vh-100 position-fixed bg-info nominations-list">
                     <div class="row no-gutters my-3">
                         <div class="d-flex w-100 align-items-center justify-content-between">
                             <p class="mb-0 font-weight-bold" style="letter-spacing:3px;">NOMINATIONS</p>
@@ -191,7 +178,7 @@
                                         <img :src="movie.Poster" class="card-img-top img-fluid rounded-0">
                                 </div>
                                 <div class="card-body p-0 d-flex flex-column justify-content-between rounded-bottom flex-grow-0" style="background:crimson;">
-                                        <p class="card-title text-white m-2 text-monospace" style="font-size:10px;z-index:100;">  
+                                        <p class="card-title text-white m-2" style="font-size:10px;z-index:100;">  
                                             <i class="fas fa-book text-warning"></i>:&nbsp;&nbsp;[[ movie.Title ]]
                                             <br><i class="fas fa-calendar-alt text-warning"></i>:&nbsp;&nbsp;[[ movie.Year ]]<br>
                                             <i class="fas fa-cogs text-warning"></i>:&nbsp;&nbsp;[[ movie.Type ]] 
@@ -219,6 +206,9 @@
                 </div>
             </transition>
         </div>
+        <div class="footer mt-auto bg-success py-2">
+            <p class="text-center mb-0"><i class="fas fa-code"></i> with <i class="fas fa-heart text-danger"></i>, Charles.</p>
+        </div>
         <script src="assets/js/vue.js"></script>
         <script src="assets/js/aos.js"></script>
         <script src="assets/js/anime.min.js"></script>
@@ -241,6 +231,7 @@
                 data: function(){
                     return {
                         showdetail: false,
+                        moviedetail: {}
                     }            
                 },
                 computed: {
@@ -265,14 +256,15 @@
                 },
                 methods: {
                     cardclick(e){
+                        this.detail()
                         wrapper = document.getElementById('result-wrapper')
                         cardcount = document.getElementsByClassName('card').length
-                        card = e.target.parentNode.parentNode
+                        var card = e.target.parentNode.parentNode
                         var col = parseInt((wrapper.offsetWidth/card.offsetWidth).toFixed(1))
                         var row = parseInt((cardcount/col).toFixed(1))
                         var index = card.parentNode.dataset.index
                         anime({
-                            targets: '.card',
+                            targets: '.animated-card',
                             autoplay: true,
                             opacity: [
                                 {value: .5, easing: "easeOutSine", duration: 600},
@@ -288,7 +280,7 @@
                             ],
                             delay: anime.stagger(200, { grid: [row, col], from: index}),
                             complete: function() {
-                    
+                                console.log(card)
                             }
                         })
                         setTimeout( function(){
@@ -306,7 +298,7 @@
                         var row = parseInt((cardcount/col).toFixed(1))
                         var index = index
                         anime({
-                            targets: '.card',
+                            targets: '.animated-card',
                             autoplay: true,
                             opacity: [
                                 {value: 1, easing: "easeInOutQuad", duration: 600},
@@ -326,12 +318,23 @@
                             }
                         })
                     },
-                    hovered(e){
-                        console.log(e.target)
-                        e.target.parentNode.classList.add('on-top')
-                    },
-                    hoveredout(e){
-                        e.target.parentNode.classList.remove('on-top')
+                    detail(){
+                        let url = "http://www.omdbapi.com/"
+                        let movie = this.id
+                        var endpoint = url + "?i=" + movie + "&apikey=1e8b7f0c"
+                        fetch(endpoint)
+                        .then(res => res.ok && res.json() || Promise.reject(res))
+                        .then(result => {
+                            this.moviedetail = _.pick(result, ['Title', 'Year', 
+                                                                'Rated', 'Released', 
+                                                                'Runtime', 'Genre', 
+                                                                'Director', 'Writer', 
+                                                                'Actors', 'Plot', 
+                                                                'Language', 'Country',
+                                                                'Type', 'DVD',
+                                                                'Boxoffice', 'Production', 'Website'])
+                        })
+                        console.log(this.moviedetail)
                     },
                 }, 
                 template: `                        
@@ -347,13 +350,13 @@
                                         </div>
                                     </div>
                                     <div class="card-body p-0 d-flex flex-column justify-content-between rounded-bottom flex-grow-0" style="will-change:transform;min-height: 140px;max-height: 140px;background:crimson;">
-                                        <p class="card-title text-white m-2 text-monospace" style="font-size:10px;will-change:transform;">  
+                                        <p class="card-title text-white m-2 fancy-font" style="font-size:10px;will-change:transform;">  
                                             <i class="fas fa-book text-warning"></i>:&nbsp;&nbsp;[[ title ]]
                                             <br><i class="fas fa-calendar-alt text-warning"></i>:&nbsp;&nbsp;[[ year ]]<br>
                                             <i class="fas fa-cogs text-warning"></i>:&nbsp;&nbsp;[[ type|title ]] 
                                         </p>
                                         <div class="bg-dark">
-                                            <transition mode="out-in" leave-active-class="animate__animated animate__fadeOutUp" enter-active-class="animate__animated animate__fadeInDown">
+                                            <transition mode="out-in" leave-active-class="animate__animated animate__fadeOutRight" enter-active-class="animate__animated animate__fadeInLeft">
                                                 <button type="button" key="notnominated" v-if="!nominated" style="will-change:transform;"  @click="$emit('addnomination', id)" class="btn btn-block remove-outline position-relative nominate-button"><span><i class="fas fa-vote-yea"></i></span></button>
                                                 <button type="button" key="nominated" style="will-change:transform;" v-else @click="$emit('removenomination', id)" class="btn btn-block remove-outline bg-warning position-relative nominate-button"><span><i class="fas fa-thumbs-down"></i></span></button>
                                             </transition>
@@ -367,14 +370,17 @@
                                                 <button @click="closecardclick(index)" type="button" class="btn btn-danger grow"><i class="fas fa-times"></i></button>
                                             </div>
                                             <div class="row no-gutters justify-content-between align-items-center">
-                                                <div class="col-4">
+                                                <div class="col-md-4 col-6 mb-4 mb-md-0">
                                                     <div class="d-flex h-100 align-items-center justify-content-center overflow-hidden">
                                                         <img :src="poster" class="img-thumbnail img-fluid animate__animated animate__fadeInUp animate__delay-2s" alt="...">
                                                     </div>
                                                 </div>
-                                                <div class="col-7 animate__animated animate__fadeIn animate__delay-1s">
-                                                    <h5 class="mt-0">Center-aligned media</h5>
-                                                    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+                                                <div class="col-md-7 col-12 rounded p-2 p-md-3 animate__animated animate__fadeIn animate__delay-1s" style="overflow-y:auto;max-height:50vh;color: #212529;background:#35dad2;">
+                                                    <ul class="list-group list-unstyled">
+                                                        <li v-for="(value, name) in moviedetail">
+                                                            <p><span class="font-weight-bold">[[ name ]] :</span> [[ value ]]</p>
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>
@@ -408,12 +414,12 @@
                 },
                 updated(){
                     AOS.refreshHard();
+                    this.animate_loading()
                     this.animate_cards()
                 },
                 watch: {
                     query: function(newSearch, oldSearch){
                         if (newSearch !== oldSearch){
-                            console.log("runniing")
                             this.search();
                         }
                     },
@@ -441,32 +447,51 @@
                             let url = "http://www.omdbapi.com/"
                             let movie = this.query
                             var endpoint = url + "?s=" + movie + "&apikey=1e8b7f0c"
-                            var result = {"Search":[{"Title":"Next Avengers: Heroes of Tomorrow","Year":"2008","imdbID":"tt1259998","Type":"movie","Poster":"https://m.media-amazon.com/images/M/MV5BMTQ3NjExNjY4N15BMl5BanBnXkFtZTcwNTczODkwNQ@@._V1_SX300.jpg"},{"Title":"Avengers Confidential: Black Widow & Punisher","Year":"2014","imdbID":"tt3482378","Type":"movie","Poster":"https://m.media-amazon.com/images/M/MV5BMTU2MDg0Njk4MF5BMl5BanBnXkFtZTgwMTY0OTIyMTE@._V1_SX300.jpg"},{"Title":"Avengers Grimm","Year":"2015","imdbID":"tt4296026","Type":"movie","Poster":"https://m.media-amazon.com/images/M/MV5BMTg5NDEzNDIyOV5BMl5BanBnXkFtZTgwODY3ODA5MzE@._V1_SX300.jpg"},{"Title":"Crippled Avengers","Year":"1978","imdbID":"tt0077292","Type":"movie","Poster":"https://m.media-amazon.com/images/M/MV5BOTgzMjMxOTYtYzQzZi00NWM1LTljZDMtN2UwZWE3MjlhZDdlXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg"},{"Title":"The New Avengers","Year":"1976–1977","imdbID":"tt0074031","Type":"series","Poster":"https://m.media-amazon.com/images/M/MV5BMTIwNDg4NzE1N15BMl5BanBnXkFtZTcwNTIwMDYyMQ@@._V1_SX300.jpg"},{"Title":"Avengers: United They Stand","Year":"1999–2000","imdbID":"tt0203247","Type":"series","Poster":"https://m.media-amazon.com/images/M/MV5BNDg0MzM1MWQtMDI3ZC00NDY4LTk4MjYtMjdjNDZlNzk3MTY5XkEyXkFqcGdeQXVyNjExODE1MDc@._V1_SX300.jpg"},{"Title":"Lego Marvel Super Heroes: Avengers Reassembled","Year":"2015","imdbID":"tt5371572","Type":"movie","Poster":"https://m.media-amazon.com/images/M/MV5BNWU3MDM2ZmMtZjU1MC00N2Y4LTgwYmQtMDQ2MzY5M2E5OWFmXkEyXkFqcGdeQXVyNjg5MzE4NTA@._V1_SX300.jpg"},{"Title":"The Masked Avengers","Year":"1981","imdbID":"tt0082153","Type":"movie","Poster":"https://m.media-amazon.com/images/M/MV5BMTlmYjI4MDAtMThlZC00NmVlLWFiN2ItMTQzODM3ZjYyMjU1XkEyXkFqcGdeQXVyMjAyNTEwOQ@@._V1_SX300.jpg"},{"Title":"Avengers Grimm: Time Wars","Year":"2018","imdbID":"tt8159584","Type":"movie","Poster":"https://m.media-amazon.com/images/M/MV5BMDQwYTMwODItNWQ5Zi00ZTkyLWEzMDctOGM0NGVlOTg3MGRlXkEyXkFqcGdeQXVyMjM0ODM1NTE@._V1_SX300.jpg"},{"Title":"Lego Marvel's Avengers","Year":"2016","imdbID":"tt4776398","Type":"game","Poster":"https://m.media-amazon.com/images/M/MV5BMGU5MDYzYzEtYTNhNi00ODM1LWE0MDEtODUzZDNhOWMxZTBkXkEyXkFqcGdeQXVyNDQ2OTk4MzI@._V1_SX300.jpg"}],"totalResults":"107","Response":"True"}
-                            setTimeout( function(){
-                                this.animate_logo()
-                                this.animate_count(result.totalResults)
-                                this.searching = false
-                                this.movies = this.movies.concat(result.Search)
-                                this.searchfocus(false)
-                                window.addEventListener("scroll", this.lazyLoad);
-                            }.bind(this), 2000)
+                            fetch(endpoint)
+                            .then(res => res.ok && res.json() || Promise.reject(res))
+                            .then(result => {
+                                if(result.Error === undefined){
+                                    setTimeout( function(){
+                                        this.animate_logo()
+                                        this.animate_count(result.totalResults)
+                                        this.searching = false
+                                        this.movies = result.Search
+                                        this.searchfocus(false)
+                                        this.loadMore()
+                                        window.addEventListener("scroll", this.lazyLoad);
+                                    }.bind(this), 2000)
+                                } else{
+                                    this.searching = false
+                                    this.empty = true
+                                }
+                            })
                         }
-                    }, 1000),
+                    }, 600),
                     loadMore(){
                         if (this.query !== ""){
                             this.busy = true;
                             this.animate_loading()
                             this.page = this.page + 1
-                            let page = this.page
                             let url = "http://www.omdbapi.com/"
                             let movie = this.query
-                            var endpoint = url + "?s=" + movie + "&apikey=1e8b7f0c&page=" + String(page)
-                            var result = {"Search":[{"Title":"Next Avengers: Heroes of Tomorrow","Year":"2008","imdbID":"tt1259998","Type":"movie","Poster":"https://m.media-amazon.com/images/M/MV5BMTQ3NjExNjY4N15BMl5BanBnXkFtZTcwNTczODkwNQ@@._V1_SX300.jpg"},{"Title":"Avengers Confidential: Black Widow & Punisher","Year":"2014","imdbID":"tt3482378","Type":"movie","Poster":"https://m.media-amazon.com/images/M/MV5BMTU2MDg0Njk4MF5BMl5BanBnXkFtZTgwMTY0OTIyMTE@._V1_SX300.jpg"},{"Title":"Avengers Grimm","Year":"2015","imdbID":"tt4296026","Type":"movie","Poster":"https://m.media-amazon.com/images/M/MV5BMTg5NDEzNDIyOV5BMl5BanBnXkFtZTgwODY3ODA5MzE@._V1_SX300.jpg"},{"Title":"Crippled Avengers","Year":"1978","imdbID":"tt0077292","Type":"movie","Poster":"https://m.media-amazon.com/images/M/MV5BOTgzMjMxOTYtYzQzZi00NWM1LTljZDMtN2UwZWE3MjlhZDdlXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg"},{"Title":"The New Avengers","Year":"1976–1977","imdbID":"tt0074031","Type":"series","Poster":"https://m.media-amazon.com/images/M/MV5BMTIwNDg4NzE1N15BMl5BanBnXkFtZTcwNTIwMDYyMQ@@._V1_SX300.jpg"},{"Title":"Avengers: United They Stand","Year":"1999–2000","imdbID":"tt0203247","Type":"series","Poster":"https://m.media-amazon.com/images/M/MV5BNDg0MzM1MWQtMDI3ZC00NDY4LTk4MjYtMjdjNDZlNzk3MTY5XkEyXkFqcGdeQXVyNjExODE1MDc@._V1_SX300.jpg"},{"Title":"Lego Marvel Super Heroes: Avengers Reassembled","Year":"2015","imdbID":"tt5371572","Type":"movie","Poster":"https://m.media-amazon.com/images/M/MV5BNWU3MDM2ZmMtZjU1MC00N2Y4LTgwYmQtMDQ2MzY5M2E5OWFmXkEyXkFqcGdeQXVyNjg5MzE4NTA@._V1_SX300.jpg"},{"Title":"The Masked Avengers","Year":"1981","imdbID":"tt0082153","Type":"movie","Poster":"https://m.media-amazon.com/images/M/MV5BMTlmYjI4MDAtMThlZC00NmVlLWFiN2ItMTQzODM3ZjYyMjU1XkEyXkFqcGdeQXVyMjAyNTEwOQ@@._V1_SX300.jpg"},{"Title":"Avengers Grimm: Time Wars","Year":"2018","imdbID":"tt8159584","Type":"movie","Poster":"https://m.media-amazon.com/images/M/MV5BMDQwYTMwODItNWQ5Zi00ZTkyLWEzMDctOGM0NGVlOTg3MGRlXkEyXkFqcGdeQXVyMjM0ODM1NTE@._V1_SX300.jpg"},{"Title":"Lego Marvel's Avengers","Year":"2016","imdbID":"tt4776398","Type":"game","Poster":"https://m.media-amazon.com/images/M/MV5BMGU5MDYzYzEtYTNhNi00ODM1LWE0MDEtODUzZDNhOWMxZTBkXkEyXkFqcGdeQXVyNDQ2OTk4MzI@._V1_SX300.jpg"}],"totalResults":"107","Response":"True"}
-                            setTimeout( function(){
-                                this.busy = false
-                                this.movies = this.movies.concat(result.Search)
-                                window.addEventListener("scroll", this.lazyLoad);
-                            }.bind(this), 2000)
+                            var endpoint = url + "?s=" + movie + "&apikey=1e8b7f0c&page=" + String(this.page)
+                            fetch(endpoint)
+                            .then(res => res.ok && res.json() || Promise.reject(res))
+                            .then(data => {
+                                if(data.Error === undefined){
+                                    var result = data
+                                    setTimeout( function(){
+                                        this.busy = false
+                                        if(result.Search.length > 0) {
+                                            this.movies = this.movies.concat(result.Search)
+                                            window.addEventListener("scroll", this.lazyLoad);
+                                        }
+                                    }.bind(this), 2000)
+                                } else{
+                                    this.busy = false
+                                    this.empty = true
+                                }
+                            })
                         }
                     },
                     animate_cards(){
@@ -614,9 +639,9 @@
                         setTimeout(function(){
                             el.style.opacity = 1
                             el.classList.add("animate__animated", "animate__fadeInUp")   
-                            this.lazyLoad()
                         }.bind(this), delay)
                         el.addEventListener('animationend', ()=> {
+                            this.lazyLoad()
                             el.classList.remove('animate__animated', 'animated__fadInUp');
                         })
                     },
@@ -646,6 +671,7 @@
                         }.bind(this), delay)
                         el.addEventListener('animationend', ()=> {
                             el.remove();
+                            this.lazyLoad();
                         })
                     },
                 },

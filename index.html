@@ -18,7 +18,7 @@
             <div class="row justify-content-center no-gutters">
                 <div class="col-5 col-md-2">
                     <div class="d-flex my-3 animate__animated animate__fadeInDown justify-content-center" v-if="!shownav">
-                        <svg width="100%" height="100%" viewBox="0 0 519 128" fill="#0000" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="100%" height="100%" viewBox="0 0 519 127" fill="#0000" xmlns="http://www.w3.org/2000/svg">
                         <g filter="url(#filter0_b)">
                         <mask id="path-1-outside-1" maskUnits="userSpaceOnUse" x="0.203125" y="0.375" width="519" height="127" fill="none">
                         <rect fill="white" x="0.203125" y="0.375" width="519" height="127"/>
@@ -67,7 +67,7 @@
                 <div class="col-12 col-md-10">
                     <div class="d-flex justify-content-end p-3 overflow-hidden" style="font-size: 1.4em;">
                         <button @click="shownomination=true" class="btn text-primary btn-transparent badge grow remove-outline position-relative" :data-count="nominations.length">
-                            <i class="fas fa-clipboard-list animate__animated animate__fadeInLeft animate__faster animate__delay-5s"></i>
+                            <i class="fas fa-clipboard-list animate__animated animate__fadeInLeft animate__faster animate__delay-3s"></i>
                         </button>
                         <button disabled class="btn text-primary btn-transparent badge remove-outline position-relative" data-count="0">
                             <i class="fas fa-bell animate__animated animate__fadeInRight animate__delay-3s"></i>
@@ -78,7 +78,7 @@
             <transition enter-active-class="animate__animated animate__slideInDown" leave-active-class="animate__animated animate__slideOutUp">
                 <div v-if="shownav" class="d-flex align-items-center fixed-top justify-content-between py-3 px-3" style="z-index:30;background-color:#3c385c;">
                     <div class="col-4 col-md-2">   
-                        <svg width="100%" height="100%" viewBox="0 0 519 128" fill="#dc3545" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="100%" height="100%" viewBox="0 0 519 127" fill="#dc3545" xmlns="http://www.w3.org/2000/svg">
                             <g filter="url(#filter0_b)">
                             <mask id="path-1-outside-1" maskUnits="userSpaceOnUse" x="0.203125" y="0.375" width="519" height="127" fill="none">
                             <rect fill="white" x="0.203125" y="0.375" width="519" height="127"/>
@@ -153,7 +153,7 @@
                     </div>
                 </transition>
             </div>
-            <div v-if="shownomination" @click="shownomination=false" class="fixed-top vh-100 vw-100" style="opacity:.8;background:#000000;z-index:50;"></div>
+            <div v-if="shownomination" @click="shownomination=false" class="fixed-top vh-100 vw-100 overflow-auto" style="opacity:.8;background:#000000;z-index:50;"></div>
             <transition enter-active-class="animate__animated animate__slideInRight" leave-active-class="animate__animated animate__slideOutRight animate__fast"> 
                 <div v-if="shownomination" key="items" class="container fancy-font d-flex flex-column vh-100 position-fixed bg-info nominations-list">
                     <div class="row no-gutters my-3">
@@ -201,7 +201,7 @@
             </transition>
         </div>
         <div class="footer mt-auto bg-success py-2">
-            <p class="text-center mb-0"><i class="fas fa-code"></i> with <i class="fas fa-heart text-danger"></i>, Charles.</p>
+            <p class="text-center mb-0"><i class="fas fa-code"></i> with <i class="fas fa-heart text-danger"></i>, Charles. <a class="text-decoration-none text-dark" href="https://www.github.com/charles-co/shopify-challenge.git"><i class="fab fa-github"></i></a></p>
         </div>
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script src="assets/js/vue-infinite-scroll.js"></script>

@@ -12,8 +12,28 @@
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
             <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+        <style>
+            @keyframes pulse {
+                from {
+                    transform: scale3d(1, 1, 1);
+                }
+
+                50% {
+                    transform: scale3d(0.95, 0.95, 0.95);
+                }
+
+                to {
+                    transform: scale3d(1, 1, 1);
+                }
+            }
+
+            .pulse {
+                animation: pulse 10s ease-in-out infinite;
+            }
+        </style>
     </head>
-    <body class="min-vh-100 wrapper d-flex flex-column" style="overflow-x:hidden;">
+    
+    <body class="min-vh-100 wrapper d-flex flex-column">
         <div id="mainwrapper" class="container">
             <div class="row justify-content-center no-gutters">
                 <div class="col-5 col-md-2">
@@ -122,7 +142,7 @@
                     </div>
                 </div>
             </transition>
-            <div class="" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy">
+            <div class="mb-3" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy">
                 <transition-group id="result-wrapper" appear mode="out-in" name="list" tag="div" v-on:before-enter="beforeEnter" v-on:enter="enter" v-on:leave="leave" class="row no-gutters justify-content-md-start">
                     <movie-card
                         v-for="(movie, index) in movies"
@@ -140,7 +160,7 @@
                     ></movie-card>
                 </transition-group>
                 <transition mode="out-in" enter-active-class="animate__animated animate__fadeInUp" leave-active-class="animate__animated animate__fadeOutDown">
-                    <div class="justify-content-center py-4" v-if="busy" :class="{'d-flex': busy}">
+                    <div class="d-flex justify-content-center py-4" v-if="busy">
                         <div class="m-1 loading bg-danger rounded" style="height:10px;width:10px;" role="status">
                             <span class="sr-only">Loading...</span>
                         </div>
@@ -155,36 +175,40 @@
             </div>
             <div v-if="shownomination" @click="shownomination=false" class="fixed-top vh-100 vw-100 overflow-hidden" style="opacity:.8;background:#000000;z-index:50;"></div>
             <transition enter-active-class="animate__animated animate__slideInRight" leave-active-class="animate__animated animate__slideOutRight animate__fast"> 
-                <div v-if="shownomination" key="items" class="container d-flex flex-column min-vh-100 position-fixed bg-info nominations-list overflow-auto">
-                    <div class="row no-gutters my-3">
-                        <div class="d-flex w-100 align-items-center justify-content-between">
-                            <p class="mb-0 font-weight-bold fancy-font" style="letter-spacing:3px;">NOMINATIONS</p>
-                            <button @click="shownomination=false" class="btn grow remove-outline bg-danger text-white">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <p v-if="nominations.length < 1" class="small font-italic text-center">No nominations yet...</p>  
-                    <transition-group mode="out-in" name="nomination-list-items" tag="ul" leave-active-class="animate__animated animate__zoomOut animate__slow" class="list-group bg-transparent list-group-horizontal flex-wrap overflow-auto flex-grow-1"> 
-                        <li id="" v-if="nominations.length > 0" class="mb-2 px-1 py-0 bg-transparent border-0 col-6 col-md-12 col-lg-12 list-group-item" v-for="movie in nominations" :key="movie.imdbID">
-                            <div class="d-flex flex-column card border-0 bg-transparent"> 
-                                <div class="flex-grow-1 border-0 bg-dark d-flex flex-column justify-content-start align-items-center">
-                                        <img :src="movie.Poster" class="card-img-top img-fluid rounded-0">
-                                </div>
-                                <div class="card-body fancy-font p-0 d-flex flex-column justify-content-between rounded-bottom flex-grow-0" style="background:crimson;">
-                                        <p class="card-title text-white m-2" style="font-size:10px;z-index:100;">  
-                                            <i class="fas fa-book text-warning"></i>:&nbsp;&nbsp;[[ movie.Title ]]
-                                            <br><i class="fas fa-calendar-alt text-warning"></i>:&nbsp;&nbsp;[[ movie.Year ]]<br>
-                                            <i class="fas fa-cogs text-warning"></i>:&nbsp;&nbsp;[[ movie.Type ]] 
-                                        </p>
-                                        <button type="button" @click="revoke(movie.imdbID)" class="btn btn-block fancy-font rounded-0 py-3 text-white remove-outline bg-warning"><span><i class="fas fa-thumbs-down"></i></span></button>
-                                </div>
+                <div v-if="shownomination" key="items" class="container position-fixed bg-info nominations-list overflow-auto">
+                    <div class="d-flex flex-column vh-100">
+                        <div class="row no-gutters my-3 flex-grow-0">
+                            <div class="d-flex w-100 align-items-center justify-content-between">
+                                <p class="mb-0 font-weight-bold fancy-font" style="letter-spacing:3px;">NOMINATIONS</p>
+                                <button @click="shownomination=false" class="btn grow remove-outline bg-danger text-white">
+                                    <i class="fas fa-times"></i>
+                                </button>
                             </div>
-                        </li>    
-                    </transition-group>
-                    <button type="button" @click="revoke('all')" class="btn rounded py-3 my-2 rounded-0 btn-block btn-transparent btn-outline-danger">
-                        <span>CLEAR ALL</span>
-                    </buttion>
+                        </div>
+                        <p v-if="nominations.length < 1" class="small font-italic text-center">No nominations yet...</p>
+                        <div class="flex-grow-1 overflow-auto">
+                            <transition-group mode="out-in" name="nomination-list-items" tag="ul" leave-active-class="animate__animated animate__zoomOut animate__slow" class="list-group bg-transparent list-group-horizontal flex-wrap overflow-auto"> 
+                                <li id="" v-if="nominations.length > 0" class="mb-2 px-1 py-0 bg-transparent border-0 col-6 col-md-12 col-lg-12 list-group-item" v-for="movie in nominations" :key="movie.imdbID">
+                                    <div class="d-flex flex-column card border-0 bg-transparent"> 
+                                        <div class="flex-grow-1 border-0 bg-dark d-flex flex-column justify-content-start align-items-center">
+                                                <img :src="movie.Poster" class="card-img-top img-fluid rounded-0">
+                                        </div>
+                                        <div class="card-body fancy-font p-0 d-flex flex-column justify-content-between rounded-bottom flex-grow-0" style="background:crimson;">
+                                                <p class="card-title text-white m-2" style="font-size:10px;z-index:100;">  
+                                                    <i class="fas fa-book text-warning"></i>:&nbsp;&nbsp;[[ movie.Title ]]
+                                                    <br><i class="fas fa-calendar-alt text-warning"></i>:&nbsp;&nbsp;[[ movie.Year ]]<br>
+                                                    <i class="fas fa-cogs text-warning"></i>:&nbsp;&nbsp;[[ movie.Type ]] 
+                                                </p>
+                                                <button type="button" @click="revoke(movie.imdbID)" class="btn btn-block rounded-0 py-3 text-white remove-outline bg-warning"><span><i class="fas fa-thumbs-down"></i></span></button>
+                                        </div>
+                                    </div>
+                                </li>    
+                            </transition-group>
+                        </div>
+                        <button type="button" @click="revoke('all')" class="btn flex-grow-0 rounded fancy-font py-3 my-2 rounded-0 btn-block btn-transparent btn-outline-danger">
+                            <span>CLEAR ALL</span>
+                        </buttion>
+                    </div>
                 </div>
             </transition>
             <transition leave-active-class="animate__animated animate__slideOutUp animate__slow">
@@ -247,9 +271,11 @@
                 },
                 methods: {
                     cardclick(e){
+                        cards = document.getElementsByClassName('animated-card')
+                        this.$parent.$parent.animate_cards(cards, false)
                         this.detail()
                         wrapper = document.getElementById('result-wrapper')
-                        cardcount = document.getElementsByClassName('card').length
+                        cardcount = cards.length
                         var card = e.target.parentNode.parentNode
                         var col = parseInt((wrapper.offsetWidth/card.offsetWidth).toFixed(1))
                         var row = parseInt((cardcount/col).toFixed(1))
@@ -271,18 +297,16 @@
                             ],
                             delay: anime.stagger(200, { grid: [row, col], from: index}),
                             complete: function() {
-                                console.log(card)
                             }
                         })
                         setTimeout( function(){
                             this.showdetail = true
-                            document.querySelector('body').style.overflowY = "hidden";
                         }.bind(this), 900)
                     },
                     closecardclick(index){
                         this.showdetail = false;
                         wrapper = document.getElementById('result-wrapper')
-                        cards = document.getElementsByClassName('card')
+                        var cards = document.getElementsByClassName('animated-card')
                         card = cards[index]
                         cardcount = cards.length
                         var col = parseInt((wrapper.offsetWidth/card.offsetWidth).toFixed(1))
@@ -305,9 +329,11 @@
                             ],
                             delay: anime.stagger(200, { grid: [row, col], from: index}),
                             complete: function() {
-                                document.querySelector('body').style.overflowY = "scroll";
                             }
                         })
+                        setTimeout(function(){
+                            this.$parent.$parent.animate_cards(cards, true)
+                        }.bind(this), 700)
                     },
                     detail(){
                         let url = "http://www.omdbapi.com/"
@@ -325,12 +351,11 @@
                                                                 'Type', 'DVD',
                                                                 'Boxoffice', 'Production', 'Website'])
                         })
-                        console.log(this.moviedetail)
                     },
                 }, 
                 template: `                        
                             <div id="" class="mb-2 col-6 card-wrapper col-md-3 col-lg-2 overflow-hidden">
-                                <div class="d-flex px-1 h-100 flex-column animated-card card search-result bg-transparent"> 
+                                <div class="d-flex px-1 h-100 flex-column animated-card pulse card search-result bg-transparent"> 
                                     <div data-aos="zoom-in" style="will-change:transform;cursor:pointer;" class="flex-grow-1 border-0 bg-transparent d-flex flex-column justify-content-start align-items-center lazy-container">
                                         <img @click="cardclick($event)" style="will-change:transform;" :data-src="poster" class="card-img-top img-fluid lazy-image rounded-0">
                                         <div class="lds-ellipsis text-dark spinner">
@@ -356,18 +381,16 @@
                                 </div>
                                 <transition enter-active-class="animate__animated animate__fadeInBottomLeft" leave-active-class="animate__animated animate__fadeOutBottomLeft">
                                     <div v-if="showdetail" class="fixed-top vh-100 vw-100" style="background:#B66C8D">
-                                        <div class="container">
-                                            <div class="d-flex justify-content-end mb-5 mt-2">
+                                        <div class="d-flex h-100 flex-column p-3">
+                                            <div class="d-flex w-100 flex-grow-0 justify-content-end mb-3 mb-md-5">
                                                 <button @click="closecardclick(index)" type="button" class="btn btn-danger grow"><i class="fas fa-times"></i></button>
                                             </div>
-                                            <div class="row no-gutters justify-content-between align-items-center">
-                                                <div class="col-md-4 col-6 mb-4 mb-md-0">
-                                                    <div class="d-flex h-100 align-items-center justify-content-center overflow-hidden">
-                                                        <img :src="poster" class="img-thumbnail img-fluid animate__animated animate__fadeInUp animate__delay-2s" alt="...">
-                                                    </div>
+                                            <div class="d-flex flex-column p-2 p-md-3 shadow flex-md-row flex-grow-1 overflow-auto justify-content-md-between justify-content-start">
+                                                <div class="flex-grow-0 col-6 col-md-4 px-0 mb-md-0">
+                                                    <img :src="poster" class="img-thumbnail img-fluid animate__animated animate__fadeInUp animate__delay-2s" alt="...">
                                                 </div>
-                                                <div class="col-md-7 col-12 rounded p-2 p-md-3 animate__animated animate__fadeIn animate__delay-1s" style="overflow-y:auto;max-height:50vh;color: #212529;background:#35dad2;">
-                                                    <ul class="list-group list-unstyled">
+                                                <div class="flex-grow-1 col-md-7 px-0 col-12">
+                                                    <ul class="list-group list-unstyled animate__animated rounded p-2 p-md-3 animate__fadeIn animate__delay-1s" style="color: #212529;background:#35dad2;">
                                                         <li v-for="(value, name) in moviedetail">
                                                             <p><span class="font-weight-bold">[[ name ]] :</span> [[ value ]]</p>
                                                         </li>
@@ -406,7 +429,6 @@
                 updated(){
                     AOS.refreshHard();
                     this.animate_loading()
-                    this.animate_cards()
                 },
                 watch: {
                     query: function(newSearch, oldSearch){
@@ -437,11 +459,12 @@
                             this.movies = []
                             let url = "http://www.omdbapi.com/"
                             let movie = this.query
+                            this.empty = false
                             var endpoint = url + "?s=" + movie + "&apikey=1e8b7f0c"
                             fetch(endpoint)
                             .then(res => res.ok && res.json() || Promise.reject(res))
                             .then(result => {
-                                if(result.Error === undefined){
+                                if(result["Error"] === undefined){
                                     setTimeout( function(){
                                         this.animate_logo()
                                         this.animate_count(result.totalResults)
@@ -453,13 +476,13 @@
                                     }.bind(this), 2000)
                                 } else{
                                     this.searching = false
-                                    this.empty = true
+                                    alert(result["Error"])
                                 }
                             })
                         }
                     }, 600),
                     loadMore(){
-                        if (this.query !== ""){
+                        if (this.query !== "" && !this.empty){
                             this.busy = true;
                             this.animate_loading()
                             this.page = this.page + 1
@@ -485,18 +508,17 @@
                             })
                         }
                     },
-                    animate_cards(){
-                        anime({
-                            targets: '.animated-card',
-                            scale: 0.95,
-                            autoplay: true,
-                            loop: true,
-                            duration: 5000,
-                            delay: anime.stagger(100),
-                            endDelay: anime.stagger(100, {from: 'last'}),
-                            direction: 'alternate',
-                            easing: 'easeInOutQuad'
-                        })
+                    animate_cards(cards, action){
+                        if(!action){
+                            _.forEach(cards, function(card){
+                                card.classList.remove('pulse')
+                            });
+                        }
+                        else{
+                            _.forEach(cards, function(card){
+                                card.classList.add('pulse')
+                            });
+                        }
                     },
                     animate_count(end){
                         var elem = document.getElementsByClassName('badge')
@@ -543,9 +565,6 @@
                         var scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop
                         if(scrollTop >= 260){
                             this.shownav = true
-                            setTimeout(function() {
-                                this.animate_logo()
-                            }.bind(this), 1000)
                         }else{
                             this.shownav = false
                         }
@@ -570,6 +589,7 @@
                         })
                         setTimeout(function(){
                             this.shownav = false
+                            this.animate_logo()
                             this.searchfocus(true)
                         }.bind(this), 800)
                     },

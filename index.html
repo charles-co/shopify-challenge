@@ -466,9 +466,7 @@
                                 "Content-Type": "application/json",
                             }
                         })
-                        .then((res) =>
-                           res.json();
-                         )
+                        .then((res) => res.json();)
                         .then(result => {
                             if(result["Error"] === undefined){
                                 setTimeout( function(){

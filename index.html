@@ -462,11 +462,7 @@
                         var endpoint = url + "?s=" + movie + "&apikey=1e8b7f0c"
                         fetch(endpoint, {
                             method: "GET",
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'Content-Type': 'application/json'
-                                }
-                         })
+                        })
                         .then(res => res.ok && res.json() || Promise.reject(res))
                         .then(result => {
                             if(result["Error"] === undefined){

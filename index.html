@@ -463,7 +463,9 @@
                         fetch(endpoint, {
                             method: "GET",
                         })
-                        .then(res => res.ok && res.json() || Promise.reject(res))
+                        .then(res => {
+                           return res.json();
+                         })
                         .then(result => {
                             if(result["Error"] === undefined){
                                 setTimeout( function(){

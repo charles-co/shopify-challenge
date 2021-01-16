@@ -462,6 +462,9 @@
                         var endpoint = url + "?s=" + movie + "&apikey=1e8b7f0c"
                         fetch(endpoint, {
                             method: "GET",
+                            headers: {
+                                "Content-Type": "application/json",
+                            }
                         })
                         .then(res => {
                            return res.json();

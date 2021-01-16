@@ -73,7 +73,7 @@
                 </div>
                 <div class="w-100"></div>
                 <div class="col-12 mt-4 col-md-10">
-                    <form @submit.prevent class="position-relative overflow-hidden">
+                    <form @submit.prevent="search" class="position-relative overflow-hidden">
                         <input type="text" id="InputSearch" autocomplete="off" id="InputSearch" v-model.trim="query" @keyup.enter="search" placeholder="search for movie..." aria-label="Search" class="form-control bg-transparent search border-bottom border-top-0 border-right-0 border-left-0 rounded-0">
                         <p class="text-muted mt-2 search-help-text font-italic">please try to specific with search. e.g Avengers.</p>
                         <transition enter-active-class="animate__animated animate__fadeInRight animate__faster" leave-active-class="animate__animated animate__faster animate__fadeOutRight">
@@ -432,7 +432,7 @@
                 },
                 watch: {
                     query: function(newSearch, oldSearch){
-                        if (newSearch !== oldSearch){
+                        if (newSearch !== oldSearch && newSearch !== ""){
                             this.search();
                         }
                     },
@@ -454,33 +454,31 @@
                 },
                 methods: {
                     search: _.debounce(function(){
-                        if (this.query !== ""){
-                            this.searching = true
-                            this.movies = []
-                            let url = "http://www.omdbapi.com/"
-                            let movie = this.query
-                            this.empty = false
-                            var endpoint = url + "?s=" + movie + "&apikey=1e8b7f0c"
-                            fetch(endpoint)
-                            .then(res => res.ok && res.json() || Promise.reject(res))
-                            .then(result => {
-                                if(result["Error"] === undefined){
-                                    setTimeout( function(){
-                                        this.animate_logo()
-                                        this.animate_count(result.totalResults)
-                                        this.searching = false
-                                        this.movies = result.Search
-                                        this.searchfocus(false)
-                                        this.loadMore()
-                                        window.addEventListener("scroll", this.lazyLoad);
-                                    }.bind(this), 2000)
-                                } else{
+                        this.searching = true
+                        this.movies = []
+                        let url = "http://www.omdbapi.com/"
+                        let movie = this.query
+                        this.empty = false
+                        var endpoint = url + "?s=" + movie + "&apikey=1e8b7f0c"
+                        fetch(endpoint)
+                        .then(res => res.ok && res.json() || Promise.reject(res))
+                        .then(result => {
+                            if(result["Error"] === undefined){
+                                setTimeout( function(){
+                                    this.animate_logo()
+                                    this.animate_count(result.totalResults)
                                     this.searching = false
-                                    alert(result["Error"])
-                                }
-                            })
-                        }
-                    }, 600),
+                                    this.movies = result.Search
+                                    this.searchfocus(false)
+                                    this.loadMore()
+                                    window.addEventListener("scroll", this.lazyLoad);
+                                }.bind(this), 2000)
+                            } else{
+                                this.searching = false
+                                alert(result["Error"])
+                            }
+                        })
+                    }, 1000),
                     loadMore(){
                         if (this.query !== "" && !this.empty){
                             this.busy = true;

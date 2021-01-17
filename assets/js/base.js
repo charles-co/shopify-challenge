@@ -158,12 +158,12 @@ Vue.component('movie-card', {
                     <transition enter-active-class="animate__animated animate__fadeInBottomLeft" leave-active-class="animate__animated animate__fadeOutBottomLeft">
                         <div v-if="showdetail" id="detail" class="fixed-top vw-100 overflow-hidden" style="background:#B66C8D">
                             <div class="d-flex h-100 flex-column p-3">
-                                <div class="d-flex w-100 flex-grow-0 justify-content-end mb-3 mb-md-5">
+                                <div class="d-flex w-100 flex-grow-0 justify-content-end mb-2 mb-md-5">
                                     <button @click="closecardclick(index)" type="button" class="btn btn-danger grow"><i class="fas fa-times"></i></button>
                                 </div>
                                 <div class="row no-gutters p-2 p-md-3 shadow flex-grow-1 overflow-hidden justify-content-md-around align-content-md-center align-content-between justify-content-start">
                                     <div class="col-6 col-md-4">
-                                        <img :src="poster" class="img-thumbnail bg-bg-transparent img-fluid animate__animated animate__fadeInUp animate__delay-2s" alt="...">
+                                        <img :src="poster" class="img-thumbnail bg-bg-transparent img-fluid animate__animated animate__fadeInUp animate__delay-2s mb-2" alt="...">
                                     </div>
                                     <div class="col-md-7 movie-details h-100 col-12">
                                         <ul class="list-group mh-100 list-unstyled animate__animated rounded p-2 overflow-auto p-md-3 animate__fadeIn animate__delay-1s" style="color: #212529;background:#35dad2;">

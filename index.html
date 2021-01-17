@@ -170,7 +170,7 @@
             <transition enter-active-class="animate__animated animate__slideInRight" leave-active-class="animate__animated animate__slideOutRight animate__fast"> 
                 <div v-show="shownomination" id="nominations" key="items" class="container position-fixed bg-info nominations-list overflow-hidden">
                     <div class="d-flex flex-column h-100">
-                        <div class="row no-gutters mt-3 flex-grow-0">
+                        <div class="row no-gutters my-3 flex-grow-0">
                             <div class="d-flex w-100 align-items-center justify-content-between">
                                 <p class="mb-0 font-weight-bold fancy-font" style="letter-spacing:3px;">NOMINATIONS</p>
                                 <button @click="shownomination=false" class="btn grow remove-outline bg-danger text-white">
@@ -198,7 +198,7 @@
                                 </li>    
                             </transition-group>
                         </div>
-                        <button type="button" @click="revoke('all')" disabled="nominations.length > 1" class="btn flex-grow-0 rounded fancy-font py-3 my-2 rounded-0 btn-block clear-all btn-outline-danger">
+                        <button type="button" @click="revoke('all')" :disabled="nominations.length < 1" class="btn flex-grow-0 rounded fancy-font py-3 my-2 rounded-0 btn-block clear-all btn-outline-danger">
                             <span>CLEAR ALL</span>
                         </buttion>
                     </div>

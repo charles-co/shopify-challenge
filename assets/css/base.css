@@ -303,6 +303,13 @@ body::-webkit-scrollbar {
 .nomination-list-items-move{
     transition: transform 1s;
 }
+@media (max-width: 767px) {
+    .h-100.movie-details{
+        height: 60% !important;
+    }
+
+}
+
 @media (min-width: 650px) {
     .form-control.search {
         line-height: 3rem;

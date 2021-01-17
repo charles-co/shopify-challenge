@@ -18,6 +18,10 @@
     
     <body class="min-vh-100 wrapper d-flex flex-column">
         <div id="mainwrapper" class="container">
+            <transition enter-active-class="animate__animated animate__fadeInDown" leave-active-class="animate__animated animate__fadeOutUp">
+                <div class="alert fixed-top rounded-0 alert-info" v-show="alert.show" v-html="alert.msg" role="alert">
+                </div>
+            </transition>
             <div class="row justify-content-center no-gutters">
                 <div class="col-5 col-md-2">
                     <div class="d-flex my-3 animate__animated animate__fadeInDown justify-content-center" v-if="!shownav">
@@ -56,8 +60,8 @@
                 </div>
                 <div class="w-100"></div>
                 <div class="col-12 mt-4">
-                    <form @submit.prevent="search" method="get" class="position-relative overflow-hidden">
-                        <input type="text" id="InputSearch" autocomplete="off" id="InputSearch" v-model.trim="query" @keyup.enter="search" placeholder="search for movie..." aria-label="Search" class="form-control bg-transparent search border-bottom border-top-0 border-right-0 border-left-0 rounded-0">
+                    <form @submit.prevent="gateway" method="get" class="position-relative overflow-hidden">
+                        <input type="text" id="InputSearch" autocomplete="off" id="InputSearch" v-model.trim="query" placeholder="search for movie..." aria-label="Search" class="form-control bg-transparent search border-bottom border-top-0 border-right-0 border-left-0 rounded-0">
                         <p class="text-muted mt-2 search-help-text font-italic">please try to specific with search. e.g Avengers.</p>
                         <transition enter-active-class="animate__animated animate__fadeInRight animate__faster" leave-active-class="animate__animated animate__faster animate__fadeOutRight">
                             <div class="spinner-border spinner-border-sm loading-spinner position-absolute" v-if="searching" style="color:#35dad2" role="status">
@@ -77,6 +81,12 @@
                         </button>
                     </div>
                 </div>
+                <div class="w-100"></div>
+                <transition enter-active-class="animate__animated animate__fadeInDown animate__slow animate__delay-1s" leave-active-class="animate__animated animate__fadeOutUp">
+                    <div v-if="nominations.length >= 5" class="bg-success p-2 banner col-12 col-md-5">
+                        <p class="fancy-font text-center mb-0" style="text-shadow: #dae0e5 0px 0px 3px, #212529 0px 0px 5px">5 nominations reached.</p>
+                    </div>
+                </transition>
             </div>
             <transition enter-active-class="animate__animated animate__slideInDown" leave-active-class="animate__animated animate__slideOutUp">
                 <div v-if="shownav" class="d-flex align-items-center fixed-top justify-content-between py-3 px-3" style="z-index:30;background-color:#3c385c;">
@@ -125,7 +135,7 @@
                     </div>
                 </div>
             </transition>
-            <div class="mb-3 px-md-5" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy">
+            <div class="my-3 px-md-5" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy">
                 <transition-group id="result-wrapper" appear mode="out-in" name="list" tag="div" v-on:before-enter="beforeEnter" v-on:enter="enter" v-on:leave="leave" class="row no-gutters justify-content-md-start">
                     <movie-card
                         v-for="(movie, index) in movies"
@@ -188,7 +198,7 @@
                                 </li>    
                             </transition-group>
                         </div>
-                        <button type="button" @click="revoke('all')" v-if="nominations.length > 1" class="btn flex-grow-0 rounded fancy-font py-3 my-2 rounded-0 btn-block clear-all btn-outline-danger">
+                        <button type="button" @click="revoke('all')" disabled="nominations.length > 1" class="btn flex-grow-0 rounded fancy-font py-3 my-2 rounded-0 btn-block clear-all btn-outline-danger">
                             <span>CLEAR ALL</span>
                         </buttion>
                     </div>
@@ -216,8 +226,5 @@
         <script src="https://cdn.jsdelivr.net/npm/vue-infinite-scroll@2.0.2/vue-infinite-scroll.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js" integrity="sha512-90vH1Z83AJY9DmlWa8WkjkV79yfS2n2Oxhsi2dZbIv0nC4E6m5AbH8Nh156kkM7JePmqD6tcZsfad1ueoaovww==" crossorigin="anonymous"></script>
         <script src="assets/js/base.js"></script>
-        <script type="text/javascript">
-                  
-        </script>
     </body>
 </html>

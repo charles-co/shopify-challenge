@@ -347,6 +347,16 @@ body::-webkit-scrollbar {
     background-size: 300% 300%;
     animation: gradient 15s ease infinite;
 }
+
+.banner{
+    background: -webkit-linear-gradient(to right, #ff3333 0%, #df99ff 100%);
+    background: -o-linear-gradient(to right, #ff3333 0%, #df99ff 100%);
+    background: -moz-linear-gradient(to right, #ff3333 0%, #df99ff 100%);
+    background: linear-gradient(to right, #ff3333 0%, #df99ff 100%);
+    background-size: 300% 300%;
+    animation: gradient 8s ease infinite;
+}
+
 @keyframes gradient {
     0% {
         background-position: 0% 50%;

@@ -133,8 +133,8 @@ Vue.component('movie-card', {
                 <div id="" class="mb-2 col-6 card-wrapper col-md-3 col-lg-2 overflow-hidden">
                     <div class="d-flex px-1 h-100 flex-column animated-card pulse card search-result bg-transparent"> 
                         <div data-aos="zoom-in" style="will-change:transform;cursor:pointer;" class="flex-grow-1 border-0 bg-transparent d-flex flex-column justify-content-start align-items-center lazy-container">
-                            <img @click="cardclick($event)" style="will-change:transform;" :data-src="poster" class="card-img-top img-fluid lazy-image rounded-0">
-                            <div class="lds-ellipsis text-dark spinner">
+                            <img @click="cardclick($event)" style="will-change:transform;" :data-src="poster" class="card-img-top bg-light img-fluid lazy-image rounded-0">
+                            <div class="lds-ellipsis my-5 text-dark spinner">
                                 <div></div>
                                 <div></div>
                                 <div></div>
@@ -163,7 +163,7 @@ Vue.component('movie-card', {
                                 </div>
                                 <div class="row no-gutters p-2 p-md-3 shadow flex-grow-1 overflow-hidden justify-content-md-around align-content-md-center align-content-between justify-content-start">
                                     <div class="col-6 col-md-4">
-                                        <img :src="poster" class="img-thumbnail img-fluid animate__animated animate__fadeInUp animate__delay-2s" alt="...">
+                                        <img :src="poster" class="img-thumbnail bg-bg-transparent img-fluid animate__animated animate__fadeInUp animate__delay-2s" alt="...">
                                     </div>
                                     <div class="col-md-7 movie-details h-100 col-12">
                                         <ul class="list-group mh-100 list-unstyled animate__animated rounded p-2 overflow-auto p-md-3 animate__fadeIn animate__delay-1s" style="color: #212529;background:#35dad2;">
@@ -194,7 +194,11 @@ const movieapp = new Vue({
             nominationlimit: false,
             shownomination: false,
             shownav: false,
-            searching: false
+            searching: false,
+            alert: {
+                show: false,
+                msg: ""
+            },
         }
     },
     created(){
@@ -208,7 +212,7 @@ const movieapp = new Vue({
     watch: {
         query: function(newSearch, oldSearch){
             if (newSearch !== oldSearch && newSearch !== ""){
-                this.gateway();
+                this.search();
             }
         },
         nominations: function(recent, old){
@@ -231,38 +235,42 @@ const movieapp = new Vue({
         }.bind(this), 2000)
     },
     methods: {
-        gateway: _.debounce(function(){
-            this.search()
-        }, 2000),
-        search(){
-            this.searching = true
-            this.movies = []
-            let url = "https://www.omdbapi.com/"
-            let movie = this.query
-            this.empty = false
-            var endpoint = url + "?s=" + movie + "&apikey=1e8b7f0c"
-            fetch(endpoint)
-            .then(res => res.ok && res.json() || Promise.reject(res))
-            .then(result => {
-                if(result["Error"] === undefined){
-                    setTimeout( function(){
-                        this.animate_logo()
-                        this.animate_count(result.totalResults)
-                        this.searching = false
-                        this.movies = this.noimage(result.Search)
-                        this.searchfocus(false)
-                        this.loadMore()
-                        window.addEventListener("scroll", this.lazyLoad);
-                    }.bind(this), 2000)
-                } else{
-                    this.searching = false
-                    alert(result["Error"])
-                }
-            })
-            .catch(error => {
-                console.log(error)
-            })
+        gateway(){
+            this.search.cancel;
         },
+        search: _.debounce(function(){
+                console.log("runs")
+                this.searching = true
+                this.movies = []
+                let url = "https://www.omdbapi.com/"
+                let movie = this.query
+                this.empty = false
+                var endpoint = url + "?s=" + movie + "&apikey=1e8b7f0c"
+                fetch(endpoint)
+                .then(res => res.ok && res.json() || Promise.reject(res))
+                .then(result => {
+                    if(result["Error"] === undefined){
+                        setTimeout( function(){
+                            this.animate_logo()
+                            console.log(result)
+                            this.animate_count(result.totalResults)
+                            this.searching = false
+                            this.movies = this.noimage(result.Search)
+                            this.searchfocus(false)
+                            this.loadMore()
+                            window.addEventListener("scroll", this.lazyLoad);
+                        }.bind(this), 2000)
+                    } else{
+                        this.searching = false
+                        this.alert.show=true
+                        this.alert.msg = result["Error"]
+                        setTimeout( function(){
+                            this.alert.show = false
+                            this.alert.msg = ""
+                        }.bind(this), 3000)
+                    }
+                })
+        }, 2000),
         noimage(movies){
             _.forEach(movies, function(value){
                 if (value.Poster === "N/A"){

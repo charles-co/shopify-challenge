@@ -429,7 +429,12 @@ const movieapp = new Vue({
         },
         nominate(key){
             if(this.nominations.length >= 5) {
-                alert("MAXIMUM NOMINATIONS REACHED.")
+                this.alert.show=true
+                this.alert.msg = "Maximum Nominations Reached"
+                setTimeout( function(){
+                    this.alert.show = false
+                    this.alert.msg = ""
+                }.bind(this), 3000)
                 return;
             }
             this.nominations = this.nominations.concat(_.filter(this.movies, ({imdbID}) => imdbID === key))

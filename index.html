@@ -485,7 +485,7 @@
                         .catch(error => {
                             console.log(error)
                         })
-                    }, 1000),
+                    }, 2000),
                     loadMore(){
                         if (this.query !== "" && !this.empty){
                             this.busy = true;
@@ -596,7 +596,7 @@
                             this.shownav = false
                             this.animate_logo()
                             this.searchfocus(true)
-                        }.bind(this), 800)
+                        }.bind(this), 1000)
                     },
                     lazyLoad(){
                         let lazyImages = [].slice.call(document.querySelectorAll("div.lazy-container"));

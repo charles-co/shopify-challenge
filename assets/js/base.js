@@ -278,7 +278,7 @@ const movieapp = new Vue({
                         setTimeout( function(){
                             this.busy = false
                             if(result.Search.length > 0) {
-                                this.movies = this.movies.concat(result.Search)
+                                this.movies = this.movies.concat(this.noimage(result.Search))
                                 window.addEventListener("scroll", this.lazyLoad);
                             }
                         }.bind(this), 2000)

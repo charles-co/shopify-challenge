@@ -198,7 +198,7 @@
                                 </li>    
                             </transition-group>
                         </div>
-                        <button type="button" @click="revoke('all')" disabled="nominations.length < 1" class="btn flex-grow-0 rounded fancy-font py-3 my-2 rounded-0 btn-block clear-all btn-outline-danger">
+                        <button type="button" @click="revoke('all')" disabled="nominations.length > 1" class="btn flex-grow-0 rounded fancy-font py-3 my-2 rounded-0 btn-block clear-all btn-outline-danger">
                             <span>CLEAR ALL</span>
                         </buttion>
                     </div>

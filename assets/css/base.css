@@ -112,6 +112,24 @@ body::-webkit-scrollbar {
     right: 0;
 }
 
+@keyframes pulse {
+    from {
+        transform: scale3d(1, 1, 1);
+    }
+
+    50% {
+        transform: scale3d(0.95, 0.95, 0.95);
+    }
+
+    to {
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+.pulse {
+    animation: pulse 10s ease-in-out infinite;
+}
+
 .search-help-text {
     font-size: 11px;
     color: white !important;

@@ -13,23 +13,6 @@
             <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
         <style>
-            @keyframes pulse {
-                from {
-                    transform: scale3d(1, 1, 1);
-                }
-
-                50% {
-                    transform: scale3d(0.95, 0.95, 0.95);
-                }
-
-                to {
-                    transform: scale3d(1, 1, 1);
-                }
-            }
-
-            .pulse {
-                animation: pulse 10s ease-in-out infinite;
-            }
         </style>
     </head>
     
@@ -72,7 +55,7 @@
                     </div>
                 </div>
                 <div class="w-100"></div>
-                <div class="col-12 mt-4 col-lg-10">
+                <div class="col-12 mt-4 col-md-10">
                     <form @submit.prevent="search" method="get" class="position-relative overflow-hidden">
                         <input type="text" id="InputSearch" autocomplete="off" id="InputSearch" v-model.trim="query" @keyup.enter="search" placeholder="search for movie..." aria-label="Search" class="form-control bg-transparent search border-bottom border-top-0 border-right-0 border-left-0 rounded-0">
                         <p class="text-muted mt-2 search-help-text font-italic">please try to specific with search. e.g Avengers.</p>
@@ -84,7 +67,7 @@
                     </form>
                 </div>
                 <div class="w-100"></div>
-                <div class="col-12 col-lg-10">
+                <div class="col-12 col-md-10">
                     <div class="d-flex justify-content-end p-3 overflow-hidden" style="font-size: 1.4em;">
                         <button @click="shownomination=true" class="btn text-primary btn-transparent badge grow remove-outline position-relative" :data-count="nominations.length">
                             <i class="fas fa-clipboard-list animate__animated animate__fadeInLeft animate__faster animate__delay-4s"></i>
@@ -405,7 +388,6 @@
                                     </div>
                                 </transition>
                             </div>
-                                            
                         `
             })
             const movieapp = new Vue({
@@ -437,7 +419,7 @@
                 watch: {
                     query: function(newSearch, oldSearch){
                         if (newSearch !== oldSearch && newSearch !== ""){
-                            this.search();
+                            this.gateway();
                         }
                     },
                     nominations: function(recent, old){
@@ -457,7 +439,10 @@
                     }.bind(this), 2000)
                 },
                 methods: {
-                    search: _.debounce(function(){
+                    gateway: _.debounce(function(){
+                        this.search()
+                    }, 2000),
+                    search(){
                         this.searching = true
                         this.movies = []
                         let url = "https://www.omdbapi.com/"
@@ -485,7 +470,7 @@
                         .catch(error => {
                             console.log(error)
                         })
-                    }, 2000),
+                    },
                     loadMore(){
                         if (this.query !== "" && !this.empty){
                             this.busy = true;
@@ -570,12 +555,12 @@
                         var scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop
                         if(scrollTop >= 260){
                             this.shownav = true
-                        }else if(scrollTop == 0){
+                        }else if(scrollTop == 50){
                             this.animate_logo()
-                        }else{
+                        }
+                        else{
                             this.shownav = false
                         }
-
                     },
                     searchfocus(focus){
                         var search = document.getElementById('InputSearch')
@@ -598,7 +583,7 @@
                             this.shownav = false
                             this.animate_logo()
                             this.searchfocus(true)
-                        }.bind(this), 1000)
+                        }.bind(this), 800)
                     },
                     lazyLoad(){
                         let lazyImages = [].slice.call(document.querySelectorAll("div.lazy-container"));

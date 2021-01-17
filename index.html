@@ -456,7 +456,7 @@
                     search: _.debounce(function(){
                         this.searching = true
                         this.movies = []
-                        let url = "http://www.omdbapi.com/"
+                        let url = "https://www.omdbapi.com/"
                         let movie = this.query
                         this.empty = false
                         var endpoint = url + "?s=" + movie + "&apikey=1e8b7f0c"
@@ -489,7 +489,7 @@
                             this.busy = true;
                             this.animate_loading()
                             this.page = this.page + 1
-                            let url = "http://www.omdbapi.com/"
+                            let url = "https://www.omdbapi.com/"
                             let movie = this.query
                             var endpoint = url + "?s=" + movie + "&apikey=1e8b7f0c&page=" + String(this.page)
                             fetch(endpoint)

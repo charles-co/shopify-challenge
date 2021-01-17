@@ -13,14 +13,15 @@ Vue.component('movie-card', {
             moviedetail: {}
         }            
     },
+    watch: {
+    },
     computed: {
         nominated: function(){
             if ((_.filter(this.$parent.$parent.nominations, ({imdbID}) => imdbID === this.id)).length > 0){
                 return true
             }
-            return false
-            
-        }
+            return false    
+        },
     },
     filters: {
         title: function(value){
@@ -30,6 +31,14 @@ Vue.component('movie-card', {
         },
     },
     updated(){
+        if(this.showdetail){
+            setTimeout( function(){
+                let w = window.innerHeight
+                let no = document.getElementById("detail")
+                no.style.height = w + 'px'
+            }, 1000)
+            
+        }
     },
     mounted() {
     },
@@ -147,7 +156,7 @@ Vue.component('movie-card', {
                         </div>
                     </div>
                     <transition enter-active-class="animate__animated animate__fadeInBottomLeft" leave-active-class="animate__animated animate__fadeOutBottomLeft">
-                        <div v-if="showdetail" class="fixed-top vh-100 vw-100 overflow-hidden" style="background:#B66C8D">
+                        <div v-if="showdetail" id="detail" class="fixed-top vw-100 overflow-hidden" style="background:#B66C8D">
                             <div class="d-flex h-100 flex-column p-3">
                                 <div class="d-flex w-100 flex-grow-0 justify-content-end mb-3 mb-md-5">
                                     <button @click="closecardclick(index)" type="button" class="btn btn-danger grow"><i class="fas fa-times"></i></button>
@@ -216,8 +225,8 @@ const movieapp = new Vue({
         setTimeout( function(){
             this.loading = false;
             this.animate_logo();
-            var w = window.innerHeight
-            var no = document.getElementById('nominations')
+            let w = window.innerHeight
+            let no = document.getElementById('nominations')
             no.style.height = w + 'px'
         }.bind(this), 2000)
     },
@@ -346,7 +355,7 @@ const movieapp = new Vue({
             var scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop
             if(scrollTop >= 260){
                 this.shownav = true
-            }else if(scrollTop == 0){
+            }else if(scrollTop === 0){
                 this.animate_logo()
             }
             else{

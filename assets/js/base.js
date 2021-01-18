@@ -203,6 +203,7 @@ const movieapp = new Vue({
     created(){
         this.loading = true
         AOS.init();
+        this.debouncedSearch = _.debounce(this.search, 600)
     },
     updated(){
         AOS.refreshHard();
@@ -211,7 +212,7 @@ const movieapp = new Vue({
     watch: {
         query: function(newSearch, oldSearch){
             if (newSearch !== oldSearch && newSearch !== ""){
-                this.search();
+                this.debouncedSearch();
             }
         },
         nominations: function(recent, old){
@@ -237,10 +238,7 @@ const movieapp = new Vue({
         }.bind(this), 2000)
     },
     methods: {
-        gateway(){
-            this.search.flush;
-        },
-        search: _.debounce(function(){
+        search(){
                 this.searching = true
                 this.movies = []
                 let url = "https://www.omdbapi.com/"
@@ -269,7 +267,7 @@ const movieapp = new Vue({
                         }.bind(this), 3000)
                     }
                 })
-        }, 2000),
+        },
         noimage(movies){
             _.forEach(movies, function(value){
                 if (value.Poster === "N/A"){

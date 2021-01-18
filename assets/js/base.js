@@ -228,7 +228,6 @@ const movieapp = new Vue({
         document.addEventListener("scroll", this.animate_scroll)
         setTimeout( function(){
             this.loading = false;
-            this.animate_logo();
             let w = window.innerHeight
             let no = document.getElementById('nominations')
             no.style.height = w + 'px'
@@ -251,7 +250,7 @@ const movieapp = new Vue({
                 .then(result => {
                     if(result["Error"] === undefined){
                         setTimeout( function(){
-                            this.animate_logo()
+            
                             console.log(result)
                             this.animate_count(result.totalResults)
                             this.searching = false
@@ -346,25 +345,12 @@ const movieapp = new Vue({
                 easing: 'easeInSine'
             })
         },
-        animate_logo(){
-            const svgPath = document.querySelectorAll('.path');
-            const svgText = anime({
-                targets: svgPath,
-                loop: false,
-                direction: 'alternate',
-                strokeDashoffset: [anime.setDashoffset, 0],
-                fill: "#dc3545",
-                easing: 'easeInOutSine',
-                duration: 700,
-                delay: anime.stagger(500, {start: 1000})
-            });
-        },
         animate_scroll(){
             var scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop
             if(scrollTop >= 260){
                 this.shownav = true
             }else if(scrollTop === 0){
-                this.animate_logo()
+
             }
             else{
                 this.shownav = false
@@ -389,7 +375,7 @@ const movieapp = new Vue({
             })
             setTimeout(function(){
                 this.shownav = false
-                this.animate_logo()
+
                 this.searchfocus(true)
             }.bind(this), 800)
         },

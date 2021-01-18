@@ -93,7 +93,8 @@ body::-webkit-scrollbar {
 }
 
 .wrapper{
-    background-image: url('../image/Confetti-Doodles.svg')
+    background-image: url('../image/Confetti-Doodles.svg');
+    background-color: #000000;
 }
 .search-icon.h3 {
     font-size: 1rem;

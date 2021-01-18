@@ -162,8 +162,8 @@ Vue.component('movie-card', {
                                     <button @click="closecardclick(index)" type="button" class="btn btn-danger grow float-right"><i class="fas fa-times"></i></button>
                                 </div>
                                 <div class="row no-gutters p-2 p-md-3 shadow flex-grow-1 overflow-hidden justify-content-md-around align-content-md-center align-content-between justify-content-start">
-                                    <div class="col-6 col-md-4">
-                                        <img :src="poster" class="img-thumbnail bg-bg-transparent img-fluid animate__animated animate__fadeInUp animate__delay-2s mb-2" alt="...">
+                                    <div class="col-6 col-md-4 movie-details-poster">
+                                        <img :src="poster" class="img-thumbnail mh-100 bg-transparent img-fluid animate__animated animate__fadeInUp animate__delay-2s mb-2" alt="...">
                                     </div>
                                     <div class="col-md-7 movie-details h-100 col-12">
                                         <ul class="list-group mh-100 list-unstyled animate__animated rounded p-2 overflow-auto p-md-3 animate__fadeIn animate__delay-1s" style="color: #212529;background:#35dad2;">
@@ -347,7 +347,7 @@ const movieapp = new Vue({
                 easing: 'easeInSine'
             })
         },
-        animate_scroll(){
+        animate_scroll: _.debounce(function(){
             var scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop
             if(scrollTop >= 260){
                 this.shownav = true
@@ -355,7 +355,7 @@ const movieapp = new Vue({
             else{
                 this.shownav = false
             }
-        },
+        }, 300),
         searchfocus(focus){
             var search = document.getElementById('InputSearch')
             if(focus){
@@ -375,11 +375,10 @@ const movieapp = new Vue({
             })
             setTimeout(function(){
                 this.shownav = false
-
                 this.searchfocus(true)
             }.bind(this), 800)
         },
-        lazyLoad(){
+        lazyLoad: _.debounce(function(){
             let lazyImages = [].slice.call(document.querySelectorAll("div.lazy-container"));
             if (lazyImages.length > 0){
                 let active = false;
@@ -412,7 +411,7 @@ const movieapp = new Vue({
             }else {
                 window.removeEventListener("scroll", this.lazyLoad);
             }
-        },
+        }, 200),
         nominate(key){
             if(this.nominations.length >= 5) {
                 this.alert.show=true

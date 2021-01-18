@@ -6,7 +6,7 @@ html,
 body {
     box-sizing: border-box;
     font-family: "Quicksand", sans-serif !important;
-    background-color: rgb(242, 242, 242);
+    background-color: #000000;
     -ms-overflow-style: none !important;
     scrollbar-width: none !important;
 }
@@ -93,7 +93,8 @@ body::-webkit-scrollbar {
 }
 
 .wrapper{
-    background-image: url('../image/Confetti-Doodles.svg')
+    background-image: url('../image/Confetti-Doodles.svg');
+    background-color: #000000;
 }
 .search-icon.h3 {
     font-size: 1rem;
@@ -307,7 +308,9 @@ body::-webkit-scrollbar {
     .h-100.movie-details{
         height: 60% !important;
     }
-
+    .movie-details-poster{
+        height: 35% !important;
+    }
 }
 
 @media (min-width: 650px) {

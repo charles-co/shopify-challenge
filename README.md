@@ -1,2 +1,2 @@
 # vue-page
-A page build with vuejs www.shopify-challenge-vue.netlify.app?
+A page build with vuejs shopify-challenge-vue.netlify.app?

@@ -191,7 +191,6 @@ const movieapp = new Vue({
             page: 1,
             movies: [],
             nominations: [],
-            nominationlimit: false,
             shownomination: false,
             shownav: false,
             searching: false,
@@ -222,6 +221,9 @@ const movieapp = new Vue({
     filters: {
     },
     computed: {
+        nominationlimit: function(){
+            return this.nominations.length > 4
+        }
     },
     mounted(){
         this.nominations = JSON.parse(localStorage.getItem("nominations")) || []
@@ -349,8 +351,6 @@ const movieapp = new Vue({
             var scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop
             if(scrollTop >= 260){
                 this.shownav = true
-            }else if(scrollTop === 0){
-
             }
             else{
                 this.shownav = false

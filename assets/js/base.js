@@ -347,7 +347,7 @@ const movieapp = new Vue({
                 easing: 'easeInSine'
             })
         },
-        animate_scroll(){
+        animate_scroll: _.debounce(function(){
             var scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop
             if(scrollTop >= 260){
                 this.shownav = true
@@ -355,7 +355,7 @@ const movieapp = new Vue({
             else{
                 this.shownav = false
             }
-        },
+        }, 300),
         searchfocus(focus){
             var search = document.getElementById('InputSearch')
             if(focus){
@@ -375,11 +375,10 @@ const movieapp = new Vue({
             })
             setTimeout(function(){
                 this.shownav = false
-
                 this.searchfocus(true)
             }.bind(this), 800)
         },
-        lazyLoad(){
+        lazyLoad: _.debounce(function(){
             let lazyImages = [].slice.call(document.querySelectorAll("div.lazy-container"));
             if (lazyImages.length > 0){
                 let active = false;
@@ -412,7 +411,7 @@ const movieapp = new Vue({
             }else {
                 window.removeEventListener("scroll", this.lazyLoad);
             }
-        },
+        }, 200),
         nominate(key){
             if(this.nominations.length >= 5) {
                 this.alert.show=true

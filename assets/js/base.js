@@ -227,20 +227,20 @@ const movieapp = new Vue({
     },
     mounted(){
         this.nominations = JSON.parse(localStorage.getItem("nominations")) || []
-        document.addEventListener("scroll", this.animate_scroll)
+        document.addEventListener("scroll", _.debounce(this.animate_scroll, 300))
         setTimeout( function(){
             this.loading = false;
-            let w = window.innerHeight
-            let no = document.getElementById('nominations')
-            no.style.height = w + 'px'
+            let w = window.innerHeight;
+            this.animate_logo()
+            let no = document.getElementById('nominations');
+            no.style.height = w + 'px';
         }.bind(this), 2000)
     },
     methods: {
         gateway(){
-            this.search.cancel;
+            this.search.flush;
         },
         search: _.debounce(function(){
-                console.log("runs")
                 this.searching = true
                 this.movies = []
                 let url = "https://www.omdbapi.com/"
@@ -252,8 +252,6 @@ const movieapp = new Vue({
                 .then(result => {
                     if(result["Error"] === undefined){
                         setTimeout( function(){
-            
-                            console.log(result)
                             this.animate_count(result.totalResults)
                             this.searching = false
                             this.movies = this.noimage(result.Search)
@@ -307,6 +305,19 @@ const movieapp = new Vue({
                 })
             }
         },
+        animate_logo(){
+            const svgPath = document.querySelectorAll('.path');
+            const svgText = anime({
+                targets: svgPath,
+                loop: false,
+                direction: 'alternate',
+                strokeDashoffset: [anime.setDashoffset, 0],
+                fill: "#dc3545",
+                easing: 'easeInOutSine',
+                duration: 700,
+                delay: anime.stagger(500, {start: 1000})
+            });
+        },
         animate_cards(cards, action){
             if(!action){
                 _.forEach(cards, function(card){
@@ -347,7 +358,7 @@ const movieapp = new Vue({
                 easing: 'easeInSine'
             })
         },
-        animate_scroll: _.debounce(function(){
+        animate_scroll(){
             var scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop
             if(scrollTop >= 260){
                 this.shownav = true
@@ -355,7 +366,7 @@ const movieapp = new Vue({
             else{
                 this.shownav = false
             }
-        }, 300),
+        },
         searchfocus(focus){
             var search = document.getElementById('InputSearch')
             if(focus){

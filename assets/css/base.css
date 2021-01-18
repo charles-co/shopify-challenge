@@ -308,7 +308,9 @@ body::-webkit-scrollbar {
     .h-100.movie-details{
         height: 60% !important;
     }
-
+    .movie-details-poster{
+        height: 35% !important;
+    }
 }
 
 @media (min-width: 650px) {
